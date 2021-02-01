@@ -7,10 +7,15 @@ import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.mapping.FetchType;
 import qsh.laputa.entity.Department;
 
+import java.util.List;
+
 public interface DepartmentMapper {
 
+    @Select("select * from department")
+    List<Department> getAll();
+
     @Select("select * from department where id=#{id}")
-    Department selectDepById(Integer id);
+    Department getDepById(Integer id);
 
     /**
      * 根据部门编号查询部门级联查询该部门下所有员工
@@ -30,9 +35,9 @@ public interface DepartmentMapper {
             @Result(column = "name", property = "name"),
             @Result(column = "intro", property = "intro"),
             @Result(column = "id", property = "emps",
-                    many = @Many(select = "org.laputa.mybatis.mapper.EmployeeMapper.getEmpsByDepId",
+                    many = @Many(select = "qsh.laputa.mapper.EmployeeMapper.getEmpsByDepId",
                             fetchType = FetchType.LAZY))
     })
-    public Department getDepWithEmps(Integer id);
+    Department getDepWithEmps(Integer id);
 
 }

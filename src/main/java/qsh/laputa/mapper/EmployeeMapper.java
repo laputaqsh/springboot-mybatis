@@ -7,23 +7,14 @@ import java.util.List;
 
 public interface EmployeeMapper {
 
-    @Insert("insert into employee(id,name,email,gender,dep_id) values(null,#{name},#{email},#{gender},#{dep.id})")
-    void insertEmp(Employee emp);
-
-    @Select("select * from employee where id=#{id}")
-    Employee getEmpById(Integer id);
+    @Select("select * from employee")
+    List<Employee> getAll();
 
     @Select("select * from employee where dep_id=#{depId}")
     List<Employee> getEmpsByDepId(Integer depId);
 
-    @Select("select * from employee")
-    List<Employee> selectAll();
-
-    @Update("update employee set name=#{name},email=#{email},gender=#{gender},dep_id=#{dep.id} where id=#{id}")
-    void updateEmp(Employee emp);
-
-    @Delete("delete from employee where id=#{id}")
-    void deleteEmp(Integer id);
+    @Select("select * from employee where id=#{id}")
+    Employee getEmpById(Integer id);
 
     /**
      * 查找员工的信息级联查找部门信息
@@ -44,7 +35,7 @@ public interface EmployeeMapper {
             @Result(column = "email", property = "email"),
             @Result(column = "gender", property = "gender"),
             @Result(column = "dep_id", property = "dep",
-                    one = @One(select = "org.laputa.mybatis.mapper.DepartmentMapper.getDepById",
+                    one = @One(select = "qsh.laputa.mapper.DepartmentMapper.getDepById",
                             fetchType = FetchType.EAGER))
     })
     Employee getEmpWithDep(Integer id);
